@@ -66,6 +66,7 @@ func (s *stepCtx) assertStepArgumentTable(text *godog.Table) error {
 
 func (s *stepCtx) setCurrentTimestamp(timestamp string) error {
 	assert.NotEqual(s.test, "$TIMESTAMP", timestamp)
+	assert.NotEqual(s.test, s.timestamp, timestamp)
 
 	s.timestamp = timestamp
 
@@ -74,7 +75,6 @@ func (s *stepCtx) setCurrentTimestamp(timestamp string) error {
 
 func (s *stepCtx) assertTimestamp(timestamp string) error {
 	assert.NotEqual(s.test, "$TIMESTAMP", timestamp)
-
 	assert.Equal(s.test, s.timestamp, timestamp)
 
 	return nil

@@ -24,9 +24,11 @@ type Replacer interface {
 	Replace(string) string
 }
 
-// BeforeScenario expands variables from a provider that provide only before running a scenario.
-func BeforeScenario(provide func() Pairs) Expander {
-	return mapExpander(provide())
+// BeforeScenario expands variables from a provider that will be called only once before every scenario.
+func BeforeScenario(provide func() Pairs) func() Expander {
+	return func() Expander {
+		return mapExpander(provide())
+	}
 }
 
 func placeholder(name string) string {
@@ -74,6 +76,9 @@ func newExpander(e interface{}) Expander {
 
 	case func() map[string]string:
 		return runtimeExpander(e)
+
+	case func() Expander:
+		return e()
 
 	case Replacer:
 		return e.Replace

@@ -53,7 +53,13 @@ Feature:
             | col 1   | col 2 | col 3   |
             | value 1 | John  | value 3 |
 
-    Scenario: Scenario Provider runs only once
+    Scenario: Scenario Provider runs only once every scenario
+        Given current timestamp is "$TIMESTAMP"
+
+        Then First call, timestamp = "$TIMESTAMP"
+        Then Second call, timestamp = "$TIMESTAMP"
+
+    Scenario: Scenario Provider runs once again in another scenario
         Given current timestamp is "$TIMESTAMP"
 
         Then First call, timestamp = "$TIMESTAMP"
