@@ -137,7 +137,7 @@ type Replacer interface {
 3. A map or vars (without the `$`) `map[string]string`
 
 ```go
-var _ = expandog.NewStepExpander(map[string]string{
+var _ = expandog.NewStepExpander(expandog.Pairs{
     "HUSBAND": "John",
     "WIFE":    "Jane",
 })
@@ -146,7 +146,7 @@ var _ = expandog.NewStepExpander(map[string]string{
 4. A provider that provides a map of vars (without the `$`) `map[string]string`. The provider will be called every step.
 
 ```go
-var _ = expandog.NewStepExpander(func() map[string]string {
+var _ = expandog.NewStepExpander(func() expandog.Pairs {
     return map[string]string{
         "RAND": fmt.Sprintf("%d", rand.Int63()),
     }
