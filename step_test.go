@@ -26,6 +26,11 @@ func TestExpandStep(t *testing.T) {
 				"WIFE": "Jane",
 			}
 		},
+		func() expandog.Expander {
+			return func(s string) string {
+				return strings.ReplaceAll(s, "$DURATION", "and stay there for 3 days")
+			}
+		},
 		func(s string) string {
 			return strings.ReplaceAll(s, "$FROM", "Paris")
 		},
@@ -43,8 +48,8 @@ func TestExpandStep(t *testing.T) {
 		_ = os.Unsetenv("GREETINGS") // nolint:errcheck
 	}()
 
-	step := &godog.Step{Text: "$GREETINGS, $HUSBAND & $WIFE are going from $FROM to $TO $TRANSPORT"}
-	expected := "Hi Dave, John & Jane are going from Paris to Berlin by bus"
+	step := &godog.Step{Text: "$GREETINGS, $HUSBAND & $WIFE are going from $FROM to $TO $TRANSPORT $DURATION"}
+	expected := "Hi Dave, John & Jane are going from Paris to Berlin by bus and stay there for 3 days"
 
 	expandog.ExpandStep(step, expanders...)
 

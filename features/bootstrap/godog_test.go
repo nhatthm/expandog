@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/cucumber/godog"
+	"github.com/spf13/pflag"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/nhatthm/expandog"
@@ -35,7 +36,14 @@ var (
 //nolint:gochecknoinits
 func init() {
 	flag.BoolVar(&runGoDogTests, "godog", false, "Set this flag is you want to run godog BDD tests")
-	godog.BindFlags("godog.", flag.CommandLine, &opt) // nolint: staticcheck
+	godog.BindCommandLineFlags("godog.", &opt)
+}
+
+func TestMain(m *testing.M) {
+	flag.Parse()
+	pflag.Parse()
+
+	os.Exit(m.Run())
 }
 
 func TestIntegration(t *testing.T) {

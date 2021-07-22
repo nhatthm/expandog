@@ -64,6 +64,11 @@ func TestChainExpanders(t *testing.T) {
 				"WIFE": "Jane",
 			}
 		},
+		func() Expander {
+			return func(s string) string {
+				return strings.ReplaceAll(s, "$DURATION", "and stay there for 3 days")
+			}
+		},
 		func(s string) string {
 			return strings.ReplaceAll(s, "$FROM", "Paris")
 		},
@@ -81,9 +86,9 @@ func TestChainExpanders(t *testing.T) {
 		_ = os.Unsetenv("DATE") // nolint:errcheck
 	}()
 
-	content := "On $DATE, $HUSBAND & $WIFE are going from $FROM to $TO $TRANSPORT"
+	content := "On $DATE, $HUSBAND & $WIFE are going from $FROM to $TO $TRANSPORT $DURATION"
 	actual := expand(content)
-	expected := "On Thursday, John & Jane are going from Paris to Berlin by bus"
+	expected := "On Thursday, John & Jane are going from Paris to Berlin by bus and stay there for 3 days"
 
 	assert.Equal(t, expected, actual)
 }
