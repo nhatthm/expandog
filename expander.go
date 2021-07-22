@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+const varDelimiter = "$"
+
 // ErrUnsupportedExpander indicates that the provided expander is not supported.
 var ErrUnsupportedExpander = errors.New("unsupported expander")
 
@@ -32,7 +34,7 @@ func BeforeScenario(provide func() Pairs) func() Expander {
 }
 
 func placeholder(name string) string {
-	return fmt.Sprintf("$%s", name)
+	return fmt.Sprintf("%s%s", varDelimiter, name)
 }
 
 // runtimeExpander expands variables from a provider.
@@ -74,7 +76,7 @@ func newExpander(e interface{}) Expander {
 	case Pairs:
 		return mapExpander(e)
 
-	case func() map[string]string:
+	case func() Pairs:
 		return runtimeExpander(e)
 
 	case func() Expander:
@@ -91,4 +93,8 @@ func newExpander(e interface{}) Expander {
 	}
 
 	panic(fmt.Errorf("%w: got %T", ErrUnsupportedExpander, e))
+}
+
+func doExpand(expand Expander, s string) string {
+	return expand(s)
 }
