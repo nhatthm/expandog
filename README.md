@@ -11,7 +11,7 @@ A lifesaver expander for [`cucumber/godog`](https://github.com/cucumber/godog) b
 
 ## Prerequisites
 
-- `Go >= 1.15`
+- `Go >= 1.16`
 
 ## Install
 

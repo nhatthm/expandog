@@ -1,8 +1,9 @@
 package expandog
 
 import (
+	"context"
+
 	"github.com/cucumber/godog"
-	"github.com/cucumber/messages-go/v10"
 )
 
 // StepExpander expands variables in cucumber steps.
@@ -14,12 +15,16 @@ type StepExpander struct {
 // RegisterExpander registers only the expander to the test suite to let it work.
 // There will be no registration of step definition in this method.
 func (m *StepExpander) RegisterExpander(s *godog.ScenarioContext) {
-	s.BeforeScenario(func(sc *godog.Scenario) {
+	s.Before(func(ctx context.Context, sc *godog.Scenario) (context.Context, error) {
 		m.expand = chainExpanders(m.expanders...)
+
+		return nil, nil
 	})
 
-	s.BeforeStep(func(st *godog.Step) {
+	s.StepContext().Before(func(_ context.Context, st *godog.Step) (context.Context, error) {
 		expandStep(st, m.expand)
+
+		return nil, nil
 	})
 }
 
@@ -47,12 +52,12 @@ func expandStep(st *godog.Step, expand Expander) {
 		return
 	}
 
-	switch msg := st.Argument.Message.(type) {
-	case *messages.PickleStepArgument_DocString:
-		msg.DocString.Content = doExpand(expand, msg.DocString.Content)
+	if st.Argument.DocString != nil {
+		st.Argument.DocString.Content = doExpand(expand, st.Argument.DocString.Content)
+	}
 
-	case *messages.PickleStepArgument_DataTable:
-		for _, row := range msg.DataTable.Rows {
+	if st.Argument.DataTable != nil {
+		for _, row := range st.Argument.DataTable.Rows {
 			for _, cell := range row.Cells {
 				cell.Value = doExpand(expand, cell.Value)
 			}

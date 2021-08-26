@@ -1,17 +1,17 @@
 package bootstrap
 
 import (
+	"context"
 	"testing"
 
 	"github.com/cucumber/godog"
-	"github.com/cucumber/messages-go/v10"
 	"github.com/stretchr/testify/assert"
 )
 
 type stepCtx struct {
 	test         *testing.T
 	stepText     string
-	stepArgument string
+	stepArgument interface{}
 	timestamp    string
 }
 
@@ -22,20 +22,22 @@ func (s *stepCtx) RegisterContext(t *testing.T, sc *godog.ScenarioContext) {
 
 	s.test = t
 
-	sc.AfterStep(func(st *godog.Step, _ error) {
+	sc.StepContext().After(func(_ context.Context, st *godog.Step, _ godog.StepResultStatus, _ error) (context.Context, error) {
 		s.stepText = st.Text
 
 		if st.Argument == nil {
-			return
+			return nil, nil
 		}
 
-		switch m := st.Argument.Message.(type) {
-		case *messages.PickleStepArgument_DocString:
-			s.stepArgument = m.DocString.Content
-
-		case *messages.PickleStepArgument_DataTable:
-			s.stepArgument = m.DataTable.String()
+		if st.Argument.DocString != nil {
+			s.stepArgument = st.Argument.DocString.Content
 		}
+
+		if st.Argument.DataTable != nil {
+			s.stepArgument = st.Argument.DataTable
+		}
+
+		return nil, nil
 	})
 
 	sc.Step("step text is:", s.assertStepText)
@@ -59,7 +61,7 @@ func (s *stepCtx) assertStepArgumentString(text *godog.DocString) error {
 }
 
 func (s *stepCtx) assertStepArgumentTable(text *godog.Table) error {
-	assert.Equal(s.test, text.String(), s.stepArgument)
+	assert.Equal(s.test, text, s.stepArgument)
 
 	return nil
 }

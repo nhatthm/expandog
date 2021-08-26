@@ -107,7 +107,7 @@ func RunSuite(t *testing.T, path string, featureContext func(t *testing.T, ctx *
 
 			if status != 0 {
 				fmt.Println(out.String())
-				assert.Fail(t, "one or more scenarios failed in feature: "+path)
+				assert.Failf(t, "one or more scenarios failed in feature: %s", path)
 			}
 		})
 	}
