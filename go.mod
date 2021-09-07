@@ -1,10 +1,11 @@
+// Deprecated: Use github.com/godogx/expandvars instead.
 module github.com/nhatthm/expandog
 
 go 1.17
 
 require (
 	github.com/cucumber/godog v0.12.1
-	github.com/spf13/pflag v1.0.5
+	github.com/godogx/expandvars v0.1.0
 	github.com/stretchr/testify v1.7.0
 )
 
@@ -18,5 +19,6 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 )

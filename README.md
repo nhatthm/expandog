@@ -1,7 +1,10 @@
+> ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+>
+> This module is deprecated. Use `github.com/godogx/expandvars` instead.
+
 # Variables Expander for Cucumber Steps
 
 [![GitHub Releases](https://img.shields.io/github/v/release/nhatthm/expandog)](https://github.com/nhatthm/expandog/releases/latest)
-[![Build Status](https://github.com/nhatthm/expandog/actions/workflows/test.yaml/badge.svg)](https://github.com/nhatthm/expandog/actions/workflows/test.yaml)
 [![codecov](https://codecov.io/gh/nhatthm/expandog/branch/master/graph/badge.svg?token=eTdAgDE2vR)](https://codecov.io/gh/nhatthm/expandog)
 [![Go Report Card](https://goreportcard.com/badge/github.com/nhatthm/expandog)](https://goreportcard.com/report/github.com/nhatthm/expandog)
 [![GoDevDoc](https://img.shields.io/badge/dev-doc-00ADD8?logo=go)](https://pkg.go.dev/github.com/nhatthm/expandog)
